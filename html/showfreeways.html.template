@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map_canvas { height: 100% }
+    </style>
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5OaHBqBOgHIa9f52haJAl9YPzxlWzBUU&sensor=true">
+    </script>
+    <script type="text/javascript">
+      function initialize() {
+        var myLatlng = new google.maps.LatLng(38.409253, -121.484009);
+        var mapOptions = {
+          center: myLatlng,
+          zoom: 10,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map_canvas"),
+            mapOptions);
+
+        var marker = new google.maps.Marker({
+          position: myLatlng,
+          title:"Hello World!"
+        });
+        marker.setMap(map);
+        
+        var freeways = FWYS_GO_HERE;
+        for (var freewayId in freeways) {
+          console.log(freewayId);
+          latlons = freeways[freewayId]
+          var coordinates = new Array(latlons.length);
+          for (var i = 0; i < latlons.length; i++) {
+            var lat = latlons[i][0];
+            var lon = latlons[i][1];
+            coordinates[i] = new google.maps.LatLng(lat, lon);
+          }
+          
+          for (var i = 0; i < coordinates.length-1; i++) {
+            var segment = new google.maps.Polyline({
+              path: [coordinates[i], coordinates[i+1]],
+              strokeColor: latlons[i][2],
+              strokeOpacity: 1.0,
+              strokeWeight:  4
+            });
+            segment.setMap(map);
+          }
+        }
+      }
+    </script>
+  </head>
+  <body onload="initialize()">
+    <div id="map_canvas" style="width:100%; height:100%"></div>
+  </body>
+</html>
+
